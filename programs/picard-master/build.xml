@@ -1,0 +1,40 @@
+<project name="picard" basedir="." default="all">
+
+
+    <property name="gradle.executable" location="gradlew"/>
+
+    <echo>
+        ANT IS DEPRECATED FOR BUILDING Picard
+
+        Please switch to using gradlew
+
+        Examples:
+        compile picard or it's tests
+          ./gradlew compileJava
+          ./gradlew compileTest
+
+        build a jar
+          ./gradlew jar
+
+        build a jar, along with source and document jars
+        ./gradlew build
+
+        build a jar that packages all of htsjdk's dependencies in a single jar
+        ./gradlew shadowJar
+
+        run tests, or a single test, or run a test and wait for the debugger
+          ./gradlew test
+          ./gradlew test --tests "*ParserTest"
+          ./gradlew test --tests "*ParserTest" --debug-jvm
+
+        run tests and collect coverage information (report will be in `build/reports/jacoco/test/html/index.html`)
+          ./gradlew jacocoTestReport
+ 
+        clean the project directory
+          ./gradlew clean
+
+        see an exhaustive list of all available targets
+          ./gradlew tasks
+    </echo>
+
+</project>
