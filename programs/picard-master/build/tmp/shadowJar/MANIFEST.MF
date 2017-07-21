@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: Picard
-Implementation-Version: unspecified-SNAPSHOT
-Main-Class: picard.cmdline.PicardCommandLine
-Implementation-Vendor: Broad Institute
-
