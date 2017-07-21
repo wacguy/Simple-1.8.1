@@ -63,7 +63,7 @@ programs/bwa-0.7.12/bwa index -p $my_species.chrs.fa -a is $fa
 mv $my_species.chrs.* refs/
 
 #generating dict file for GATK
-java -Xmx2g -jar programs/picard-master/build/libs/picard.jar CreateSequenceDictionary R=$fa O=refs/$my_species.chrs.dict
+java -Xmx2g -jar programs/picard.jar CreateSequenceDictionary R=$fa O=refs/$my_species.chrs.dict
 
 #mapping w/ BWA
 programs/bwa-0.7.12/bwa mem -t 2 -M $fa ${mut_files[*]} > output/$mut.sam &
@@ -88,17 +88,17 @@ programs/samtools-1.5/samtools sort -o output/$mut.sort.bam output/$mut.fix.bam 
 programs/samtools-1.5/samtools sort -o output/$wt.sort.bam output/$wt.fix.bam 
 wait
 
-java -Xmx2g -jar programs/picard-master/build/libs/picard.jar MarkDuplicates I=output/$mut.sort.bam O=output/$mut.sort.md.bam METRICS_FILE=output/$mut.matrics.txt ASSUME_SORTED=true &
-java -Xmx2g -jar programs/picard-master/build/libs/picard.jar MarkDuplicates I=output/$wt.sort.bam O=output/$wt.sort.md.bam METRICS_FILE=output/$wt.matrics.txt ASSUME_SORTED=true
+java -Xmx2g -jar programs/picard.jar MarkDuplicates I=output/$mut.sort.bam O=output/$mut.sort.md.bam METRICS_FILE=output/$mut.matrics.txt ASSUME_SORTED=true &
+java -Xmx2g -jar programs/picard.jar MarkDuplicates I=output/$wt.sort.bam O=output/$wt.sort.md.bam METRICS_FILE=output/$wt.matrics.txt ASSUME_SORTED=true
 wait
 
 #this part is just to add header for further gatk tools
-java -Xmx2g -jar programs/picard-master/build/libs/picard.jar AddOrReplaceReadGroups I=output/$mut.sort.md.bam O=output/$mut.sort.md.rg.bam RGLB=$mut RGPL=illumina RGSM=$mut RGPU=run1 SORT_ORDER=coordinate &
-java -Xmx2g -jar programs/picard-master/build/libs/picard.jar AddOrReplaceReadGroups I=output/$wt.sort.md.bam O=output/$wt.sort.md.rg.bam RGLB=$wt RGPL=illumina RGSM=$wt RGPU=run1 SORT_ORDER=coordinate
+java -Xmx2g -jar programs/picard.jar AddOrReplaceReadGroups I=output/$mut.sort.md.bam O=output/$mut.sort.md.rg.bam RGLB=$mut RGPL=illumina RGSM=$mut RGPU=run1 SORT_ORDER=coordinate &
+java -Xmx2g -jar programs/picard.jar AddOrReplaceReadGroups I=output/$wt.sort.md.bam O=output/$wt.sort.md.rg.bam RGLB=$wt RGPL=illumina RGSM=$wt RGPU=run1 SORT_ORDER=coordinate
 wait
 
-java -Xmx2g -jar programs/picard-master/build/libs/picard.jar BuildBamIndex INPUT=output/$mut.sort.md.rg.bam &
-java -Xmx2g -jar programs/picard-master/build/libs/picard.jar BuildBamIndex INPUT=output/$wt.sort.md.rg.bam
+java -Xmx2g -jar programs/picard.jar BuildBamIndex INPUT=output/$mut.sort.md.rg.bam &
+java -Xmx2g -jar programs/picard.jar BuildBamIndex INPUT=output/$wt.sort.md.rg.bam
 wait
 
 
