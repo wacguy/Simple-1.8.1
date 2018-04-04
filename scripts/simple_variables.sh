@@ -2,10 +2,8 @@
 #pipeline for mapping EMS mutants
 #variables file
 
-#Java version
-#alias java='/usr/lib/jvm/java-1.8.0/bin/java'
-
-
+#define the path to Java java-1.8.0 version
+java='/usr/lib/jvm/java-1.8.0/bin/java'
 
 #input files
 mut_files=fastq/mut*

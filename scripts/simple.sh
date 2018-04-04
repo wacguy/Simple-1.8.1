@@ -72,7 +72,7 @@ programs/bwa-0.7.12/bwa index -p $my_species.chrs.fa -a is $fa
 mv $my_species.chrs.* refs/
 
 #generating dict file for GATK
-java -Xmx2g -jar programs/picard.jar CreateSequenceDictionary R=$fa O=refs/$my_species.chrs.dict
+$java -Xmx2g -jar programs/picard.jar CreateSequenceDictionary R=$fa O=refs/$my_species.chrs.dict
 
 #mapping w/ BWA
 programs/bwa-0.7.12/bwa mem -t 2 -M $fa ${mut_files[*]} > output/$mut.sam &
@@ -97,36 +97,36 @@ programs/samtools-1.5/samtools sort -o output/$mut.sort.bam output/$mut.fix.bam 
 programs/samtools-1.5/samtools sort -o output/$wt.sort.bam output/$wt.fix.bam 
 wait
 
-java -Xmx2g -jar programs/picard.jar MarkDuplicates I=output/$mut.sort.bam O=output/$mut.sort.md.bam METRICS_FILE=output/$mut.matrics.txt ASSUME_SORTED=true &
-java -Xmx2g -jar programs/picard.jar MarkDuplicates I=output/$wt.sort.bam O=output/$wt.sort.md.bam METRICS_FILE=output/$wt.matrics.txt ASSUME_SORTED=true
+$java -Xmx2g -jar programs/picard.jar MarkDuplicates I=output/$mut.sort.bam O=output/$mut.sort.md.bam METRICS_FILE=output/$mut.matrics.txt ASSUME_SORTED=true &
+$java -Xmx2g -jar programs/picard.jar MarkDuplicates I=output/$wt.sort.bam O=output/$wt.sort.md.bam METRICS_FILE=output/$wt.matrics.txt ASSUME_SORTED=true
 wait
 
 #this part is just to add header for further gatk tools
-java -Xmx2g -jar programs/picard.jar AddOrReplaceReadGroups I=output/$mut.sort.md.bam O=output/$mut.sort.md.rg.bam RGLB=$mut RGPL=illumina RGSM=$mut RGPU=run1 SORT_ORDER=coordinate &
-java -Xmx2g -jar programs/picard.jar AddOrReplaceReadGroups I=output/$wt.sort.md.bam O=output/$wt.sort.md.rg.bam RGLB=$wt RGPL=illumina RGSM=$wt RGPU=run1 SORT_ORDER=coordinate
+$java -Xmx2g -jar programs/picard.jar AddOrReplaceReadGroups I=output/$mut.sort.md.bam O=output/$mut.sort.md.rg.bam RGLB=$mut RGPL=illumina RGSM=$mut RGPU=run1 SORT_ORDER=coordinate &
+$java -Xmx2g -jar programs/picard.jar AddOrReplaceReadGroups I=output/$wt.sort.md.bam O=output/$wt.sort.md.rg.bam RGLB=$wt RGPL=illumina RGSM=$wt RGPU=run1 SORT_ORDER=coordinate
 wait
 
-java -Xmx2g -jar programs/picard.jar BuildBamIndex INPUT=output/$mut.sort.md.rg.bam &
-java -Xmx2g -jar programs/picard.jar BuildBamIndex INPUT=output/$wt.sort.md.rg.bam
+$java -Xmx2g -jar programs/picard.jar BuildBamIndex INPUT=output/$mut.sort.md.rg.bam &
+$java -Xmx2g -jar programs/picard.jar BuildBamIndex INPUT=output/$wt.sort.md.rg.bam
 wait
 
 
 #Variant calling using GATK HC extra parameters
-java -Xmx2g -jar programs/GenomeAnalysisTK.jar -T HaplotypeCaller -R $fa -I output/$mut.sort.md.rg.bam -I output/$wt.sort.md.rg.bam -o output/$line.hc.vcf -minReadsPerAlignStart 7 -gt_mode DISCOVERY -out_mode EMIT_ALL_SITES -writeFullFormat -stand_call_conf 10 -nct 2 -variant_index_type LINEAR -variant_index_parameter 128000 -allowPotentiallyMisencodedQuals #the last argument is necessary for old sequencing results where the quality scores do not match the HC restriction: https://www.biostars.org/p/94637/; I also tried --fix_misencoded_quality_scores -fixMisencodedQuals from the same link but I received an error message. "Bad input: while fixing mis-encoded base qualities we encountered a read that was correctly encoded; we cannot handle such a mixture of reads so unfortunately the BAM must be fixed with some other tool"
+$java -Xmx2g -jar programs/GenomeAnalysisTK.jar -T HaplotypeCaller -R $fa -I output/$mut.sort.md.rg.bam -I output/$wt.sort.md.rg.bam -o output/$line.hc.vcf -minReadsPerAlignStart 7 -gt_mode DISCOVERY -out_mode EMIT_ALL_SITES -writeFullFormat -stand_call_conf 10 -nct 2 -variant_index_type LINEAR -variant_index_parameter 128000 -allowPotentiallyMisencodedQuals #the last argument is necessary for old sequencing results where the quality scores do not match the HC restriction: https://www.biostars.org/p/94637/; I also tried --fix_misencoded_quality_scores -fixMisencodedQuals from the same link but I received an error message. "Bad input: while fixing mis-encoded base qualities we encountered a read that was correctly encoded; we cannot handle such a mixture of reads so unfortunately the BAM must be fixed with some other tool"
 
 ############prepering for R#########################
 #Exclude indels from a VCF
-#java -Xmx2g -jar programs/GenomeAnalysisTK.jar -R $fa -T SelectVariants --variant output/$line.hc.vcf -o output/$line.selvars.vcf --selectTypeToInclude SNP
+#$java -Xmx2g -jar programs/GenomeAnalysisTK.jar -R $fa -T SelectVariants --variant output/$line.hc.vcf -o output/$line.selvars.vcf --selectTypeToInclude SNP
 
 #now make it into a table
-java -jar programs/GenomeAnalysisTK.jar -R $fa -T VariantsToTable -V output/$line.hc.vcf -F CHROM -F POS -F REF -F ALT -GF GT -GF AD -GF DP -GF GQ -o output/$line.table
+$java -jar programs/GenomeAnalysisTK.jar -R $fa -T VariantsToTable -V output/$line.hc.vcf -F CHROM -F POS -F REF -F ALT -GF GT -GF AD -GF DP -GF GQ -o output/$line.table
 
 
 ####################################################################################################################################################
 ########################################now let's find the best candidates##########################################################################
 
 #snpEff
-java -jar programs/snpEff/snpEff.jar -c programs/snpEff/snpEff.config $snpEffDB -s output/snpEff_summary.html output/$line.hc.vcf > output/$line.se.vcf
+$java -jar programs/snpEff/snpEff.jar -c programs/snpEff/snpEff.config $snpEffDB -s output/snpEff_summary.html output/$line.hc.vcf > output/$line.se.vcf
 
 ###%%%%%%% JEN %%%%%%%%%%
 #and finally, get only the SNPs that are ref/ref or ref/alt in the wt bulk and alt/alt in the mut bulk for recessive mutations
@@ -191,7 +191,7 @@ Rscript ./scripts/analysis3.R $line
 
 #archiving files
 mv ./output/* ./archive/
-mv ./archive/$line.*pdf* ./archive/$line.allSNPs.txt ./archive/$line.candidates.txt ./output/
+mv ./archive/$line.*pdf* ./archive/*.allSNPs.txt ./archive/$line.candidates.txt ./output/
 
 echo "$(tput setaf 1)Simple $(tput setaf 3)is $(tput setaf 4)done"
 
