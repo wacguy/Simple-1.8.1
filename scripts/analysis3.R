@@ -44,7 +44,7 @@ ratio=wt-mut
 
 allSNPs=data.frame(mntn, ratio)
 head(allSNPs)
-write.table(allSNPs, paste0(line, "allSNPs.txt"), sep="\t", row.names=F, quote=F)
+write.table(allSNPs, paste0(line, ".allSNPs.txt"), sep="\t", row.names=F, quote=F)
 
 
 tbl1=data.frame(At_num=mntn1$At_num, gene=mntn1$gene, chr=mntn1$chr, pos=mntn1$pos, mut.ref=mntn1$mut.ref, mut.alt=mntn1$mut.alt, wt.ref=mntn1$wt.ref, wt.alt=mntn1$wt.alt, mut.ratio=mut, wt.ratio=wt, ratio)
