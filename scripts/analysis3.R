@@ -55,7 +55,7 @@ breaks=seq(0, max(tbl1$pos), round(max(tbl1$pos)/3, digits=-7))
 
 #########################################################################
 #separated chromosomes original data; after filtering (tbl2)-LOESS fitted
-#removing ratios below 0.1
+#removing genes with ratio below 0.1
 #########################################################################
 tbl2=tbl1[(tbl1[,11]>0.1),]
 t2_s=split(tbl2, tbl2$chr)
@@ -92,7 +92,7 @@ ggsave(Rplot_loess1_file)
 
 #########################################################################
 #separated chromosomes original data; after filtering (tbl2)-LOESS fitted
-#removing ratios below 0.3
+#removing genes with ratio below 0.3
 #########################################################################
 tbl2=tbl1[(tbl1[,11]>0.3),]
 t2_s=split(tbl2, tbl2$chr)
