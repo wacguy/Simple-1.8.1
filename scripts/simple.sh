@@ -2,16 +2,12 @@
 #pipeline for mapping EMS mutants
 #bug report to Guy Wachsman gw57@duke.edu
 
-#exec 3>&1 4>&2
-#trap 'exec 2>&4 1>&3' 0 1 2 3
-#exec 1>log.out 2>&1
+exec 3>&1 4>&2
+trap 'exec 2>&4 1>&3' 0 1 2 3
+exec 1>log.out 2>&1
 
 #reading variables
 source ./scripts/simple_variables.sh
-
-#creating a log file for the input commands; I also wanted to have logs for the output but some of the stdout are super long
-cat ./scripts/simple.sh > ./output/log.txt
-cat ./scripts/analysis3.R >> ./output/log.txt
 
 #install programs bwa and samtools
 cd programs/bwa-0.7.12
@@ -188,6 +184,10 @@ awk 'BEGIN{OFS="\t"} NR>1 {split($6,a,"|");split($8,b,":"); split(b[2],c,","); s
 
 #JEN added the line argument below
 Rscript ./scripts/analysis3.R $line
+
+#creating a log file for the input commands; I also wanted to have logs for the output but some of the stdout are super long
+cat ./scripts/simple.sh >> ./output/log.txt
+cat ./scripts/analysis3.R >> ./output/log.txt
 
 #archiving files
 mv ./output/* ./archive/
