@@ -2,10 +2,11 @@
 #pipeline for mapping EMS mutants
 #bug report to Guy Wachsman gw57@duke.edu
 
-exec 3>&1 4>&2
-trap 'exec 2>&4 1>&3' 0 1 2 3
-exec 1>log.out 2>&1
+#exec 3>&1 4>&2
+#trap 'exec 2>&4 1>&3' 0 1 2 3
+#exec 1>log.out 2>&1
 
+{ # the entire script stdout and error will be displayed and redirected to log.txt
 #reading variables
 source ./scripts/simple_variables.sh
 
@@ -185,17 +186,17 @@ awk 'BEGIN{OFS="\t"} NR>1 {split($6,a,"|");split($8,b,":"); split(b[2],c,","); s
 #JEN added the line argument below
 Rscript ./scripts/analysis3.R $line
 
-#creating a log file for the input commands; I also wanted to have logs for the output but some of the stdout are super long
-cat ./scripts/simple.sh >> ./output/log.txt
-cat ./scripts/analysis3.R >> ./output/log.txt
-
 #archiving files
 mv ./output/* ./archive/
 mv ./archive/$line.*pdf* ./archive/*allSNPs.txt ./archive/$line.candidates.txt ./output/
 
 echo "$(tput setaf 1)Simple $(tput setaf 3)is $(tput setaf 4)done"
 
+} 2>&1 | tee log.txt
 
+#appending the simple.sh and R files to the log file
+cat ./scripts/simple.sh >> ./output/log.txt
+cat ./scripts/analysis3.R >> ./output/log.txt
 
 
 
