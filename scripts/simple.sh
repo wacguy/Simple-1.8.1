@@ -192,11 +192,11 @@ mv ./archive/$line.*pdf* ./archive/*allSNPs.txt ./archive/$line.candidates.txt .
 
 echo "$(tput setaf 1)Simple $(tput setaf 3)is $(tput setaf 4)done"
 
-} 2>&1 | tee log.txt
+} 2>&1 | tee ./archive/log.txt #with the { at the beginning of the text will redirect all console output to a file and still be visible in the terminal 
 
 #appending the simple.sh and R files to the log file
-cat ./scripts/simple.sh >> ./output/log.txt
-cat ./scripts/analysis3.R >> ./output/log.txt
+cat ./scripts/simple.sh >> ./archive/log.txt
+cat ./scripts/analysis3.R >> ./archive/log.txt
 
 
 
