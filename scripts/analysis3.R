@@ -43,7 +43,7 @@ mut=mntn1$mut.ref/(mntn1$mut.ref+mntn1$mut.alt)
 ratio=wt-mut
 
 allSNPs=data.frame(mntn, ratio)
-head(allSNPs)
+#head(allSNPs)
 write.table(allSNPs, paste0(line, ".allSNPs.txt"), sep="\t", row.names=F, quote=F)
 
 
