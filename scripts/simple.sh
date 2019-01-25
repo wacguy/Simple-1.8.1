@@ -73,11 +73,11 @@ $java -Xmx2g -jar programs/picard.jar CreateSequenceDictionary R=$fa O=refs/$my_
 
 
 #making sure that all ref files where loaded and/or created; this is a good control and id the output is "something went wrong", it is usually picard failing due to a problem with java
-a=`ls -lart refs/ | tail -n +2 | wc -l`
-if [ $a = 12 ]; then
-	echo "$(tput setaf 2)refs loaded properly"
+a=`ls -l refs/ | wc -l`
+if [ $a = 13 ]; then
+	echo "$(tput setaf 2)refs loaded properly $(tput setaf 7)"
 else
-	echo "$(tput setaf 1)something went wrong"
+	echo "$(tput setaf 1)something went wrong $(tput setaf 7)"
 fi
 
 
