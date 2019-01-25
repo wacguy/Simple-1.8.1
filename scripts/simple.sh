@@ -71,6 +71,16 @@ mv $my_species.chrs.* refs/
 #generating dict file for GATK
 $java -Xmx2g -jar programs/picard.jar CreateSequenceDictionary R=$fa O=refs/$my_species.chrs.dict
 
+
+#making sure that all ref files where loaded and/or created; this is a good control and id the output is "something went wrong", it is usually picard failing due to a problem with java
+a=`ls -lart refs/ | tail -n +2 | wc -l`
+if [ $a = 12 ]; then
+	echo "$(tput setaf 2)refs loaded properly"
+else
+	echo "$(tput setaf 1)something went wrong"
+fi
+
+
 #mapping w/ BWA
 programs/bwa-0.7.12/bwa mem -t 2 -M $fa ${mut_files[*]} > output/$mut.sam &
 programs/bwa-0.7.12/bwa mem -t 2 -M $fa ${wt_files[*]} > output/$wt.sam
