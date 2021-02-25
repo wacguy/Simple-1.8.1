@@ -83,12 +83,12 @@ fancy_scientific <- function(l) {
 }
 
 #getting the loess fitted plot
-x11()
-ggplot(tbl3, aes(pos, fitted)) + geom_point(aes(color=chr),size=0.3)+ facet_grid (.~ chr, scales = "free_x", space = "free_x")+geom_point(data=tbl3.cands, aes(x=pos, y=fitted), shape=5)+geom_text_repel(data=tbl3.cands, aes(x=pos, y=fitted, label=gene), size=3)+theme(legend.position="none")+scale_x_continuous(breaks=breaks, labels=fancy_scientific)+labs(x="position", y="ratio")
+#x11()
+xxx=ggplot(tbl3, aes(pos, fitted)) + geom_point(aes(color=chr),size=0.3)+ facet_grid (.~ chr, scales = "free_x", space = "free_x")+geom_point(data=tbl3.cands, aes(x=pos, y=fitted), shape=5)+geom_text_repel(data=tbl3.cands, aes(x=pos, y=fitted, label=gene), size=3)+theme(legend.position="none")+scale_x_continuous(breaks=breaks, labels=fancy_scientific)+labs(x="position", y="ratio")
 
 #JEN changed file name
 Rplot_loess1_file <- paste(line, ".Rplot.loess.1.pdf", sep="")
-ggsave(Rplot_loess1_file)
+ggsave(Rplot_loess1_file, plot=xxx)
 
 #########################################################################
 #separated chromosomes original data; after filtering (tbl2)-LOESS fitted
@@ -120,12 +120,12 @@ fancy_scientific <- function(l) {
 }
 
 #getting the loess fitted plot
-x11()
-ggplot(tbl3, aes(pos, fitted)) + geom_point(aes(color=chr),size=0.3)+ facet_grid (.~ chr, scales = "free_x", space = "free_x")+geom_point(data=tbl3.cands, aes(x=pos, y=fitted), shape=5)+geom_text_repel(data=tbl3.cands, aes(x=pos, y=fitted, label=gene), size=3)+theme(legend.position="none")+scale_x_continuous(breaks=breaks, labels=fancy_scientific)+labs(x="position", y="ratio")
+#x11()
+yyy=ggplot(tbl3, aes(pos, fitted)) + geom_point(aes(color=chr),size=0.3)+ facet_grid (.~ chr, scales = "free_x", space = "free_x")+geom_point(data=tbl3.cands, aes(x=pos, y=fitted), shape=5)+geom_text_repel(data=tbl3.cands, aes(x=pos, y=fitted, label=gene), size=3)+theme(legend.position="none")+scale_x_continuous(breaks=breaks, labels=fancy_scientific)+labs(x="position", y="ratio")
 
 # JEN changed file name
 Rplot_loess3_file <- paste(line, ".Rplot.loess.3.pdf", sep="")
-ggsave(Rplot_loess3_file)
+ggsave(Rplot_loess3_file, plot=yyy)
 
 #and getting the allele frequency
 tbl3.m=melt(tbl3, id.vars=c('At_num', 'gene', 'chr', 'pos', 'mut.ref', 'mut.alt', 'wt.ref', 'wt.alt', 'ratio', 'fitted'))
@@ -133,12 +133,12 @@ tbl3.m=melt(tbl3, id.vars=c('At_num', 'gene', 'chr', 'pos', 'mut.ref', 'mut.alt'
 tbl3.cands.m=melt(tbl3.cands, id.vars=c('At_num', 'gene', 'chr', 'pos', 'mut.ref', 'mut.alt', 'wt.ref', 'wt.alt', 'ratio', 'fitted'))
 
 
-x11()
-ggplot(tbl3.m, aes(pos, value)) + geom_point(aes(color=variable),size=0.3)+ facet_grid (.~ chr, scales = "free_x", space = "free_x")+geom_point(data=tbl3.cands.m, aes(x=pos, y=value), shape=5)+geom_text_repel(data=tbl3.cands.m, aes(x=pos, y=value, label=gene), size=3)+theme(legend.title = element_text(size = 0))+scale_x_continuous(breaks=breaks, labels=fancy_scientific)+labs(x="position", y="allele frequency")
+#x11()
+zzz=ggplot(tbl3.m, aes(pos, value)) + geom_point(aes(color=variable),size=0.3)+ facet_grid (.~ chr, scales = "free_x", space = "free_x")+geom_point(data=tbl3.cands.m, aes(x=pos, y=value), shape=5)+geom_text_repel(data=tbl3.cands.m, aes(x=pos, y=value, label=gene), size=3)+theme(legend.title = element_text(size = 0))+scale_x_continuous(breaks=breaks, labels=fancy_scientific)+labs(x="position", y="allele frequency")
 
 #JEN changed file name
 Rplot_allele_file <- paste(line, ".Rplot_allele.pdf", sep="")
-ggsave(Rplot_allele_file)
+ggsave(Rplot_allele_file, plot=zzz)
 #######################################
 #######################################
 
